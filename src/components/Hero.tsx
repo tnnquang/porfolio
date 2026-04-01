@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useTyping } from '@/hooks/useTyping'
 import { personalInfo } from '@/data/portfolio'
 import { animate, stagger } from 'animejs'
+import { appCopy } from '@/config/copy'
 
 export default function Hero() {
   const { t } = useTranslation()
@@ -27,17 +28,17 @@ export default function Hero() {
   return (
     <section
       id='hero'
-      aria-label='Introduction'
-      className='relative min-h-dvh flex flex-col items-center justify-center overflow-hidden px-4'
+      aria-label={appCopy.accessibility.heroSection}
+      className='relative min-h-dvh flex flex-col items-center justify-center overflow-hidden px-4 pt-24 sm:pt-28 md:pt-10'
       style={{ background: 'var(--bg)' }}
     >
       <div
-        className='blob blob-amber'
+        className='blob blob-amber hero-corner-blob-a'
         style={{ width: '600px', height: '600px', top: '-180px', right: '-120px' }}
         aria-hidden='true'
       />
       <div
-        className='blob blob-emerald'
+        className='blob blob-emerald hero-corner-blob-b'
         style={{ width: '480px', height: '480px', bottom: '-100px', left: '-100px', animationDelay: '-7s' }}
         aria-hidden='true'
       />
@@ -65,7 +66,7 @@ export default function Hero() {
 
         <div
           className='hero-item flex items-center justify-center text-xl sm:text-2xl lg:text-3xl font-bold mb-6 opacity-0 min-h-10'
-          aria-label={`Role: ${typedRole}`}
+          aria-label={`${appCopy.hero.roleAriaPrefix}: ${typedRole}`}
         >
           <span style={{ color: 'var(--primary)' }}>{typedRole}</span>
           <span className='typing-cursor' aria-hidden='true' />
@@ -75,8 +76,11 @@ export default function Hero() {
           {personalInfo.yearsOfExperience}+ <span style={{ color: 'var(--primary)' }}>{t('hero.yoe')}</span>
         </p>
 
-        <div className='hero-item flex flex-wrap justify-center gap-2 mb-10 opacity-0' aria-label='Key technologies'>
-          {['React.js', 'Next.js', 'TypeScript', 'Node.js'].map((tech) => (
+        <div
+          className='hero-item flex flex-wrap justify-center gap-2 mb-10 opacity-0'
+          aria-label={appCopy.accessibility.heroTechList}
+        >
+          {appCopy.hero.featuredTech.map((tech) => (
             <span key={tech} className='px-3 py-1.5 rounded-full text-sm font-semibold badge-amber'>
               {tech}
             </span>
@@ -128,7 +132,7 @@ export default function Hero() {
       </div>
 
       <div
-        className='hero-item absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0'
+        className='hero-item absolute bottom-4 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-2 opacity-0'
         aria-hidden='true'
       >
         <span className='text-xs font-medium tracking-widest uppercase' style={{ color: 'var(--text-muted)' }}>

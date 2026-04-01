@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { experiences } from '@/data/portfolio'
 import { useStaggerReveal } from '@/hooks/useStaggerReveal'
+import { appCopy } from '@/config/copy'
 
 const companyColors = ['var(--primary)', 'var(--secondary)', 'var(--accent)']
 
@@ -101,28 +102,38 @@ export default function Experience() {
                               className='w-full flex items-center justify-between p-4 text-left min-h-11'
                               style={{ color: 'var(--text)' }}
                             >
-                              <span className='font-semibold text-sm'>{proj.name}</span>
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                width='16'
-                                height='16'
-                                viewBox='0 0 24 24'
-                                fill='none'
-                                stroke='currentColor'
-                                strokeWidth='2'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                className='shrink-0 transition-transform duration-200'
-                                style={{ transform: isOpen ? 'rotate(180deg)' : '' }}
-                                aria-hidden='true'
-                              >
-                                <polyline points='6 9 12 15 18 9' />
-                              </svg>
+                              <div className='flex items-center justify-between gap-3 w-full'>
+                                <span className='font-semibold text-sm'>{proj.name}</span>
+                                <div className='flex items-center gap-2 shrink-0'>
+                                  <span className='text-[11px] font-semibold px-2.5 py-1 rounded-full badge-neutral'>
+                                    {proj.team ? `Team: ${proj.team}` : 'Team: N/A'}
+                                  </span>
+                                  <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    width='16'
+                                    height='16'
+                                    viewBox='0 0 24 24'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    strokeWidth='2'
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    className='shrink-0 transition-transform duration-200'
+                                    style={{ transform: isOpen ? 'rotate(180deg)' : '' }}
+                                    aria-hidden='true'
+                                  >
+                                    <polyline points='6 9 12 15 18 9' />
+                                  </svg>
+                                </div>
+                              </div>
                             </button>
                             {isOpen && (
                               <div className='px-4 pb-4 space-y-3'>
+                                <p className='text-xs font-medium' style={{ color: 'var(--text-muted)' }}>
+                                  {proj.team ? `Team size: ${proj.team}` : 'Team size: Not specified in CV'}
+                                </p>
                                 {proj.highlights.length > 0 && (
-                                  <ul className='space-y-1.5' aria-label='Highlights'>
+                                  <ul className='space-y-1.5' aria-label={appCopy.accessibility.highlights}>
                                     {proj.highlights.map((h) => (
                                       <li key={h} className='flex gap-2 text-sm' style={{ color: 'var(--text-2)' }}>
                                         <span
@@ -136,7 +147,10 @@ export default function Experience() {
                                   </ul>
                                 )}
                                 {proj.tech.length > 0 && (
-                                  <div className='flex flex-wrap gap-1.5 mt-2' aria-label='Technologies'>
+                                  <div
+                                    className='flex flex-wrap gap-1.5 mt-2'
+                                    aria-label={appCopy.accessibility.technologies}
+                                  >
                                     {proj.tech.map((t) => (
                                       <span
                                         key={t}

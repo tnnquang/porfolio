@@ -1,4 +1,5 @@
 {
+  "personalInfo.name": "Tran Ngoc Nhat Quang",
   "nav": {
     "about": "About",
     "skills": "Skills",
@@ -11,7 +12,7 @@
     "greeting": "Hi, I'm",
     "available": "Open to new opportunities",
     "yoe": "years of experience",
-    "roles": ["Frontend Developer", "React Specialist", "Next.js Expert", "UI Engineer"],
+    "roles": ["Frontend Developer", "React Developer", "Next.js Developer", "Full-stack Developer"],
     "cta_work": "View Experience",
     "cta_contact": "Get in Touch",
     "cta_cv": "Download CV",

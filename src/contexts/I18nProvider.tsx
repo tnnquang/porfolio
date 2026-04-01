@@ -14,21 +14,20 @@ interface LangContextValue {
 const LangContext = createContext<LangContextValue>({ lang: 'vi', setLang: () => {} })
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<Lang>('vi')
+  const [lang, setLangState] = useState<Lang>(() => {
+    if (typeof window === 'undefined') return 'vi'
+    const saved = localStorage.getItem('lang') as Lang | null
+    return saved === 'en' || saved === 'vi' ? saved : 'vi'
+  })
 
   useEffect(() => {
-    const saved = localStorage.getItem('lang') as Lang | null
-    if (saved === 'en' || saved === 'vi') {
-      setLangState(saved)
-      i18n.changeLanguage(saved)
-    }
-  }, [])
+    i18n.changeLanguage(lang)
+    localStorage.setItem('lang', lang)
+    document.documentElement.setAttribute('lang', lang)
+  }, [lang])
 
   const setLang = (l: Lang) => {
     setLangState(l)
-    i18n.changeLanguage(l)
-    localStorage.setItem('lang', l)
-    document.documentElement.setAttribute('lang', l)
   }
 
   return (
