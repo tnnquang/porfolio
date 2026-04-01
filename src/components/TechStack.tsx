@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { techStack } from '@/data/portfolio'
 import { useStaggerReveal } from '@/hooks/useStaggerReveal'
+import { appCopy } from '@/config/copy'
 
 const categoryBadge: Record<string, string> = {
   Frontend: 'badge-amber',
@@ -19,6 +20,13 @@ export default function TechStack() {
   const ref = useStaggerReveal<HTMLDivElement>('.reveal-item', 60)
   const [active, setActive] = useState(techStack[0].category)
   const current = techStack.find((c) => c.category === active) ?? techStack[0]
+
+  const focusByIndex = (index: number) => {
+    const tab = document.getElementById(`skill-tab-${index}`)
+    if (tab instanceof HTMLButtonElement) {
+      tab.focus()
+    }
+  }
 
   return (
     <section
@@ -49,13 +57,41 @@ export default function TechStack() {
 
         <div ref={ref}>
           {/* Tabs */}
-          <div className='flex flex-wrap gap-2 mb-8' role='tablist' aria-label='Technology categories'>
-            {techStack.map(({ category }) => (
+          <div className='flex flex-wrap gap-2 mb-8' role='tablist' aria-label={appCopy.accessibility.techCategories}>
+            {techStack.map(({ category }, index) => (
               <button
+                id={`skill-tab-${index}`}
                 key={category}
                 role='tab'
                 aria-selected={active === category}
                 aria-controls={`panel-${category}`}
+                tabIndex={active === category ? 0 : -1}
+                onKeyDown={(e) => {
+                  const currentIndex = techStack.findIndex((item) => item.category === active)
+                  if (e.key === 'ArrowRight') {
+                    e.preventDefault()
+                    const nextIndex = (currentIndex + 1) % techStack.length
+                    setActive(techStack[nextIndex].category)
+                    focusByIndex(nextIndex)
+                  }
+                  if (e.key === 'ArrowLeft') {
+                    e.preventDefault()
+                    const nextIndex = (currentIndex - 1 + techStack.length) % techStack.length
+                    setActive(techStack[nextIndex].category)
+                    focusByIndex(nextIndex)
+                  }
+                  if (e.key === 'Home') {
+                    e.preventDefault()
+                    setActive(techStack[0].category)
+                    focusByIndex(0)
+                  }
+                  if (e.key === 'End') {
+                    e.preventDefault()
+                    const last = techStack.length - 1
+                    setActive(techStack[last].category)
+                    focusByIndex(last)
+                  }
+                }}
                 onClick={() => setActive(category)}
                 className='px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 min-h-11'
                 style={

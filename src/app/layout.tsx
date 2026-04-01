@@ -1,12 +1,15 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Cuprum, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { I18nProvider } from '@/contexts/I18nProvider'
+import { appCopy } from '@/config/copy'
+import CustomCursor from '@/components/CustomCursor'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const cuprumSans = Cuprum({
+  variable: '--font-cuprum',
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap'
 })
 
@@ -17,20 +20,18 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Quang Trần — Frontend Developer',
-  description:
-    'Frontend Developer 5+ năm kinh nghiệm với React.js và Next.js. Chuyên sâu tối ưu hiệu suất, UI tương tác phức tạp và React concurrent patterns.',
+  title: appCopy.seo.title,
+  description: appCopy.seo.description,
   openGraph: {
-    title: 'Quang Trần — Frontend Developer',
-    description:
-      'Frontend Developer 5+ năm kinh nghiệm với React.js và Next.js, xây dựng ứng dụng production trong fintech và thương mại điện tử.',
+    title: appCopy.seo.title,
+    description: appCopy.seo.openGraphDescription,
     type: 'website',
-    locale: 'vi_VN'
+    locale: appCopy.seo.openGraphLocale
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Quang Trần — Frontend Developer',
-    description: 'Frontend Developer 5+ năm kinh nghiệm với React.js và Next.js.'
+    card: appCopy.seo.twitterCard,
+    title: appCopy.seo.title,
+    description: appCopy.seo.twitterDescription
   },
   robots: { index: true, follow: true }
 }
@@ -40,13 +41,16 @@ const themeScript = `(function(){var t=localStorage.getItem('theme');document.do
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang='vi' className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang='en' className={`${cuprumSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className='min-h-dvh flex flex-col antialiased'>
         <ThemeProvider>
-          <I18nProvider>{children}</I18nProvider>
+          <I18nProvider>
+            <CustomCursor />
+            {children}
+          </I18nProvider>
         </ThemeProvider>
       </body>
     </html>

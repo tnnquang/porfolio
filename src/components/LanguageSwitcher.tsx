@@ -10,9 +10,10 @@ export default function LanguageSwitcher() {
 
   return (
     <button
+      type='button'
       onClick={() => setLang(isVi ? 'en' : 'vi')}
       aria-label={isVi ? t('lang.switch_to_en') : t('lang.switch_to_vi')}
-      className='flex items-center gap-1.5 px-3 h-9 rounded-full text-sm font-semibold transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--primary)_12%,transparent)]'
+      className='flex items-center gap-1.5 px-3 min-h-11 min-w-11 rounded-full text-sm font-semibold transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] focus-visible:ring-2 focus-visible:ring-(--primary)'
       style={{ color: 'var(--text-2)', fontSize: '0.8125rem' }}
     >
       <span aria-hidden='true' className='text-sm leading-none'>

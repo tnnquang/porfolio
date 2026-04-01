@@ -7,6 +7,7 @@ import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 import BackToTop from '@/components/BackToTop'
+import { appCopy } from '@/config/copy'
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
         href='#main-content'
         className='sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-9999 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-neon-cyan focus:text-background focus:font-semibold'
       >
-        Skip to main content
+        {appCopy.accessibility.skipToMainContent}
       </a>
 
       <Navbar />

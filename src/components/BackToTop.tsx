@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 export default function BackToTop() {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 300)
@@ -13,9 +14,18 @@ export default function BackToTop() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const update = () => setPrefersReducedMotion(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
+
   return (
     <button
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      type='button'
+      onClick={() => window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' })}
       aria-label={t('footer.back_top')}
       style={{
         position: 'fixed',
@@ -26,7 +36,7 @@ export default function BackToTop() {
         pointerEvents: visible ? 'auto' : 'none',
         transition: 'opacity 0.3s ease'
       }}
-      className='btn-outline py-2 px-3 min-h-10'
+      className='btn-outline py-2 px-3 min-h-11 min-w-11 focus-visible:ring-2 focus-visible:ring-(--primary)'
     >
       <svg
         xmlns='http://www.w3.org/2000/svg'

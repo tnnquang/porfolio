@@ -3,6 +3,7 @@
 import { useTranslation } from 'react-i18next'
 import { sideProjects } from '@/data/portfolio'
 import { useStaggerReveal } from '@/hooks/useStaggerReveal'
+import { appCopy } from '@/config/copy'
 
 const colorAccents = [
   'var(--primary)',
@@ -91,7 +92,7 @@ export default function Projects() {
                   {project.description}
                 </p>
 
-                <div className='flex flex-wrap gap-1.5 mt-auto' aria-label='Technologies'>
+                <div className='flex flex-wrap gap-1.5 mt-auto' aria-label={appCopy.accessibility.technologies}>
                   {project.tech.map((tech) => (
                     <span key={tech} className='px-2.5 py-1 rounded-full text-xs font-semibold badge-neutral'>
                       {tech}
