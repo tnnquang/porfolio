@@ -1,111 +1,163 @@
-import { experiences } from '@/data/portfolio'
+'use client'
 
-const typeColors: Record<string, string> = {
-  'Full-time': 'bg-[rgba(0,212,255,0.08)] text-[var(--neon-cyan)] border border-[rgba(0,212,255,0.25)]',
-  Freelance: 'bg-[rgba(168,85,247,0.08)] text-[var(--neon-purple)] border border-[rgba(168,85,247,0.25)]'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { experiences } from '@/data/portfolio'
+import { useStaggerReveal } from '@/hooks/useStaggerReveal'
+
+const companyColors = ['var(--primary)', 'var(--secondary)', 'var(--accent)']
+
+const typeKey: Record<string, string> = {
+  'Full-time': 'type_fulltime',
+  Fulltime: 'type_fulltime',
+  Freelance: 'type_freelance'
 }
 
 export default function Experience() {
-  return (
-    <section id='experience' aria-labelledby='experience-heading' className='relative py-24 sm:py-32 px-4 sm:px-6'>
-      <div
-        aria-hidden='true'
-        className='orb orb-cyan absolute w-100 h-100 bottom-0 left-0 opacity-20 pointer-events-none'
-      />
+  const { t } = useTranslation()
+  const ref = useStaggerReveal<HTMLDivElement>()
+  const [expanded, setExpanded] = useState<Set<string>>(new Set())
 
-      <div className='relative z-10 max-w-6xl mx-auto'>
-        {/* Section label */}
-        <div className='flex items-center gap-3 mb-4'>
-          <span className='text-neon-cyan font-mono text-sm tracking-widest uppercase'>03</span>
-          <div className='h-px flex-1 max-w-15 bg-neon-cyan opacity-40' aria-hidden='true' />
+  const toggle = (key: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(key)) next.delete(key)
+      else next.add(key)
+      return next
+    })
+
+  return (
+    <section
+      id='experience'
+      aria-labelledby='exp-title'
+      className='py-24 sm:py-32 px-4 sm:px-6'
+      style={{ background: 'var(--bg-alt)' }}
+    >
+      <div className='max-w-6xl mx-auto'>
+        <div className='relative mb-16'>
+          <span className='section-num' aria-hidden='true'>
+            {t('experience.section_num')}
+          </span>
+          <p className='text-sm font-semibold uppercase tracking-widest mb-2' style={{ color: 'var(--primary)' }}>
+            {t('experience.section_num')} /
+          </p>
+          <h2
+            id='exp-title'
+            className='text-3xl sm:text-4xl lg:text-5xl font-black mb-4'
+            style={{ color: 'var(--text)' }}
+          >
+            {t('experience.title')}
+          </h2>
+          <p className='max-w-xl text-base' style={{ color: 'var(--text-2)' }}>
+            {t('experience.desc')}
+          </p>
         </div>
 
-        <h2 id='experience-heading' className='text-3xl sm:text-4xl font-bold mb-4 gradient-text-cyan-purple'>
-          Work Experience
-        </h2>
-        <p className='text-(--text-secondary) mb-16 max-w-xl'>
-          5+ years building high-impact production applications across fintech, Web3, and e-commerce.
-        </p>
+        <div ref={ref} className='relative pl-12'>
+          <div className='timeline-line' aria-hidden='true' />
 
-        {/* Timeline */}
-        <div className='space-y-14' role='list' aria-label='Work experience timeline'>
-          {experiences.map((exp, expIdx) => (
-            <article key={exp.company} role='listitem' className='relative pl-8 sm:pl-10'>
-              {/* Timeline left bar */}
-              <div
-                aria-hidden='true'
-                className='absolute left-0 top-0 bottom-0 w-px'
-                style={{
-                  background:
-                    expIdx === 0
-                      ? 'linear-gradient(180deg, var(--neon-cyan) 0%, var(--neon-purple) 60%, transparent 100%)'
-                      : expIdx === 1
-                        ? 'linear-gradient(180deg, var(--neon-purple) 0%, var(--neon-pink) 60%, transparent 100%)'
-                        : 'linear-gradient(180deg, var(--neon-pink) 0%, var(--neon-cyan) 60%, transparent 100%)'
-                }}
-              />
-              {/* Timeline dot */}
-              <div
-                aria-hidden='true'
-                className='absolute left-0 top-1.5 w-2 h-2 rounded-full -translate-x-0.75 ring-2 ring-background'
-                style={{
-                  background:
-                    expIdx === 0 ? 'var(--neon-cyan)' : expIdx === 1 ? 'var(--neon-purple)' : 'var(--neon-pink)'
-                }}
-              />
+          {experiences.map((exp, i) => {
+            const color = companyColors[i % companyColors.length]
+            return (
+              <article key={exp.company} className='reveal-item relative mb-10 last:mb-0' aria-label={exp.company}>
+                <div className='timeline-dot' style={{ background: color, top: '20px' }} />
 
-              {/* Company header */}
-              <div className='flex flex-wrap items-baseline gap-3 mb-1'>
-                <h3 className='text-xl sm:text-2xl font-bold text-foreground'>{exp.company}</h3>
-                <span className={`neon-badge text-xs ${typeColors[exp.type] ?? typeColors['Full-time']}`}>
-                  {exp.type}
-                </span>
-              </div>
-              <div className='flex flex-wrap gap-3 mb-6'>
-                <span className='text-(--text-secondary) text-sm'>{exp.role}</span>
-                <span className='text-(--text-muted) text-sm font-mono'>{exp.period}</span>
-              </div>
-
-              {/* Projects */}
-              <div className='space-y-5'>
-                {exp.projects.map((project) => (
-                  <div key={project.name} className='glass-card rounded-2xl p-5 sm:p-6'>
-                    {/* Project name + team */}
-                    <div className='flex flex-wrap items-center justify-between gap-2 mb-4'>
-                      <h4 className='text-base sm:text-lg font-semibold text-foreground'>{project.name}</h4>
-                      {project.team !== null && (
-                        <span className='text-xs text-(--text-muted) font-mono'>Team: {project.team}</span>
-                      )}
+                <div className='glass rounded-2xl p-6 sm:p-8' style={{ borderLeft: `3px solid ${color}` }}>
+                  <div className='flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4'>
+                    <div>
+                      <h3 className='text-lg sm:text-xl font-black' style={{ color: 'var(--text)' }}>
+                        {exp.role}
+                      </h3>
+                      <p className='text-base font-bold mt-0.5' style={{ color }}>
+                        {exp.company}
+                      </p>
                     </div>
-
-                    {/* Tech stack */}
-                    <ul className='flex flex-wrap gap-1.5 mb-5' role='list' aria-label={`${project.name} tech stack`}>
-                      {project.tech.map((t) => (
-                        <li key={t}>
-                          <span className='neon-badge bg-[rgba(0,0,0,0.3)] text-(--text-muted) border border-[rgba(255,255,255,0.08)] text-[0.7rem]'>
-                            {t}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Highlights */}
-                    <ul className='space-y-2' aria-label={`${project.name} highlights`}>
-                      {project.highlights.map((highlight, i) => (
-                        <li key={i} className='flex gap-3 text-sm text-(--text-secondary) leading-relaxed'>
-                          <span
-                            className='mt-1.5 shrink-0 w-1.5 h-1.5 rounded-full bg-neon-cyan opacity-70'
-                            aria-hidden='true'
-                          />
-                          {highlight}
-                        </li>
-                      ))}
-                    </ul>
+                    <div className='flex flex-col sm:items-end gap-1 shrink-0'>
+                      <span className='text-sm font-medium px-3 py-1 rounded-full badge-neutral'>{exp.period}</span>
+                      <span className='text-xs font-semibold' style={{ color: 'var(--text-muted)' }}>
+                        {t(`experience.${typeKey[exp.type] ?? 'type_fulltime'}`)}
+                      </span>
+                    </div>
                   </div>
-                ))}
-              </div>
-            </article>
-          ))}
+
+                  {exp.projects.length > 0 && (
+                    <div className='space-y-3'>
+                      {exp.projects.map((proj, pi) => {
+                        const key = `${exp.company}-${pi}`
+                        const isOpen = expanded.has(key)
+                        return (
+                          <div
+                            key={proj.name}
+                            className='rounded-xl overflow-hidden'
+                            style={{
+                              background: 'color-mix(in srgb, var(--primary) 4%, transparent)',
+                              border: '1px solid var(--border)'
+                            }}
+                          >
+                            <button
+                              type='button'
+                              onClick={() => toggle(key)}
+                              aria-expanded={isOpen}
+                              className='w-full flex items-center justify-between p-4 text-left min-h-11'
+                              style={{ color: 'var(--text)' }}
+                            >
+                              <span className='font-semibold text-sm'>{proj.name}</span>
+                              <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                width='16'
+                                height='16'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='currentColor'
+                                strokeWidth='2'
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                className='shrink-0 transition-transform duration-200'
+                                style={{ transform: isOpen ? 'rotate(180deg)' : '' }}
+                                aria-hidden='true'
+                              >
+                                <polyline points='6 9 12 15 18 9' />
+                              </svg>
+                            </button>
+                            {isOpen && (
+                              <div className='px-4 pb-4 space-y-3'>
+                                {proj.highlights.length > 0 && (
+                                  <ul className='space-y-1.5' aria-label='Highlights'>
+                                    {proj.highlights.map((h) => (
+                                      <li key={h} className='flex gap-2 text-sm' style={{ color: 'var(--text-2)' }}>
+                                        <span
+                                          className='mt-1.5 w-1.5 h-1.5 rounded-full shrink-0'
+                                          style={{ background: color }}
+                                          aria-hidden='true'
+                                        />
+                                        {h}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                                {proj.tech.length > 0 && (
+                                  <div className='flex flex-wrap gap-1.5 mt-2' aria-label='Technologies'>
+                                    {proj.tech.map((t) => (
+                                      <span
+                                        key={t}
+                                        className='px-2.5 py-1 rounded-full text-xs font-medium badge-neutral'
+                                      >
+                                        {t}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              </article>
+            )
+          })}
         </div>
       </div>
     </section>

@@ -1,130 +1,144 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useTyping } from '@/hooks/useTyping'
 import { personalInfo } from '@/data/portfolio'
+import { animate, stagger } from 'animejs'
 
 export default function Hero() {
+  const { t } = useTranslation()
+  const roles = t('hero.roles', { returnObjects: true }) as string[]
+  const typedRole = useTyping(roles)
+  const hasAnimated = useRef(false)
+
+  useEffect(() => {
+    if (hasAnimated.current) return
+    hasAnimated.current = true
+    animate('.hero-item', {
+      opacity: [0, 1],
+      translateY: [28, 0],
+      delay: stagger(110, { start: 200 }),
+      duration: 650,
+      easing: 'easeOutExpo'
+    })
+  }, [])
+
   return (
     <section
       id='hero'
       aria-label='Introduction'
-      className='relative min-h-dvh flex items-center justify-center overflow-hidden px-4 sm:px-6'
+      className='relative min-h-dvh flex flex-col items-center justify-center overflow-hidden px-4'
+      style={{ background: 'var(--bg)' }}
     >
-      {/* Background orbs */}
-      <div aria-hidden='true' className='orb orb-cyan absolute w-150 h-150 -top-32 -left-32 opacity-60' />
-      <div aria-hidden='true' className='orb orb-purple absolute w-125 h-125 -bottom-16 -right-24 opacity-50' />
       <div
+        className='blob blob-amber'
+        style={{ width: '600px', height: '600px', top: '-180px', right: '-120px' }}
         aria-hidden='true'
-        className='orb orb-cyan absolute w-75 h-75 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20'
+      />
+      <div
+        className='blob blob-emerald'
+        style={{ width: '480px', height: '480px', bottom: '-100px', left: '-100px', animationDelay: '-7s' }}
+        aria-hidden='true'
       />
 
       <div className='relative z-10 max-w-4xl mx-auto text-center'>
-        {/* Status badge */}
-        <div className='inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full glass-card neon-border-cyan text-sm text-(--text-secondary)'>
-          <span className='w-2 h-2 rounded-full bg-neon-green animate-pulse' aria-hidden='true' />
-          Available for new opportunities
+        <div
+          className='hero-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 glass-amber opacity-0'
+          role='status'
+        >
+          <span
+            className='w-2 h-2 rounded-full animate-pulse'
+            style={{ background: 'var(--secondary)' }}
+            aria-hidden='true'
+          />
+          <span style={{ color: 'var(--secondary)' }}>{t('hero.available')}</span>
         </div>
 
-        {/* Greeting */}
-        <p className='text-(--text-secondary) text-lg mb-2 font-mono tracking-widest uppercase'>Hello, I&apos;m</p>
-
-        {/* Name */}
-        <h1 className='text-5xl sm:text-7xl font-bold tracking-tight mb-4 leading-[1.1]'>
-          <span className='gradient-text-cyan-purple'>{personalInfo.name}</span>
-        </h1>
-
-        {/* Role */}
-        <h2 className='text-2xl sm:text-3xl font-semibold text-foreground mb-6'>
-          {personalInfo.role}{' '}
-          <span className='gradient-text-purple-pink font-mono'>· {personalInfo.yearsOfExperience}+ yoe</span>
-        </h2>
-
-        {/* Summary */}
-        <p className='max-w-2xl mx-auto text-(--text-secondary) text-base sm:text-lg leading-relaxed mb-10'>
-          {personalInfo.summary}
+        <p className='hero-item text-lg sm:text-xl font-medium mb-2 opacity-0' style={{ color: 'var(--text-2)' }}>
+          {t('hero.greeting')}
         </p>
 
-        {/* CTAs */}
-        <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
-          <a
-            href='#experience'
-            className='relative px-8 py-3 rounded-full font-semibold text-background bg-linear-to-r from-neon-cyan to-neon-purple hover:opacity-90 transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background'
-          >
-            View my work
-          </a>
-          <a
-            href='#contact'
-            className='px-8 py-3 rounded-full font-semibold text-foreground glass-card neon-border-cyan hover:bg-[rgba(0,212,255,0.08)] transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background'
-          >
-            Get in touch
-          </a>
+        <h1 className='hero-item text-4xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-4 opacity-0'>
+          <span className='gradient-text'>{personalInfo.name}</span>
+        </h1>
+
+        <div
+          className='hero-item flex items-center justify-center text-xl sm:text-2xl lg:text-3xl font-bold mb-6 opacity-0 min-h-10'
+          aria-label={`Role: ${typedRole}`}
+        >
+          <span style={{ color: 'var(--primary)' }}>{typedRole}</span>
+          <span className='typing-cursor' aria-hidden='true' />
         </div>
 
-        {/* Social links */}
-        <div className='flex items-center justify-center gap-6 mt-12'>
-          <a
-            href={personalInfo.github}
-            target='_blank'
-            rel='noopener noreferrer'
-            aria-label='GitHub profile'
-            className='text-(--text-muted) hover:text-neon-cyan transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan rounded'
-          >
-            <svg aria-hidden='true' width='22' height='22' viewBox='0 0 24 24' fill='currentColor'>
-              <path d='M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z' />
-            </svg>
-          </a>
-          <a
-            href={personalInfo.linkedin}
-            target='_blank'
-            rel='noopener noreferrer'
-            aria-label='LinkedIn profile'
-            className='text-(--text-muted) hover:text-neon-cyan transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan rounded'
-          >
-            <svg aria-hidden='true' width='22' height='22' viewBox='0 0 24 24' fill='currentColor'>
-              <path d='M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' />
-            </svg>
-          </a>
-          <a
-            href={`mailto:${personalInfo.email}`}
-            aria-label='Send email'
-            className='text-(--text-muted) hover:text-neon-cyan transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan rounded'
-          >
-            <svg
-              aria-hidden='true'
-              width='22'
-              height='22'
-              viewBox='0 0 24 24'
-              fill='none'
-              stroke='currentColor'
-              strokeWidth='2'
-              strokeLinecap='round'
-              strokeLinejoin='round'
-            >
-              <rect width='20' height='16' x='2' y='4' rx='2' />
-              <path d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' />
-            </svg>
-          </a>
+        <p className='hero-item text-base sm:text-lg font-semibold mb-8 opacity-0' style={{ color: 'var(--text-2)' }}>
+          {personalInfo.yearsOfExperience}+ <span style={{ color: 'var(--primary)' }}>{t('hero.yoe')}</span>
+        </p>
+
+        <div className='hero-item flex flex-wrap justify-center gap-2 mb-10 opacity-0' aria-label='Key technologies'>
+          {['React.js', 'Next.js', 'TypeScript', 'Node.js'].map((tech) => (
+            <span key={tech} className='px-3 py-1.5 rounded-full text-sm font-semibold badge-amber'>
+              {tech}
+            </span>
+          ))}
         </div>
 
-        {/* Scroll hint */}
-        <div className='mt-16 flex justify-center' aria-hidden='true'>
-          <a
-            href='#about'
-            className='flex flex-col items-center gap-2 text-(--text-muted) hover:text-neon-cyan transition-colors duration-200'
-            tabIndex={-1}
-          >
-            <span className='text-xs tracking-widest uppercase font-mono'>Scroll</span>
+        <div className='hero-item flex flex-col sm:flex-row items-center justify-center gap-4 opacity-0'>
+          <a href='#experience' className='btn-primary'>
+            {t('hero.cta_work')}
             <svg
+              xmlns='http://www.w3.org/2000/svg'
               width='16'
               height='16'
               viewBox='0 0 24 24'
               fill='none'
               stroke='currentColor'
-              strokeWidth='2'
+              strokeWidth='2.5'
               strokeLinecap='round'
               strokeLinejoin='round'
-              className='animate-bounce'
+              aria-hidden='true'
             >
-              <path d='m6 9 6 6 6-6' />
+              <line x1='5' y1='12' x2='19' y2='12' />
+              <polyline points='12 5 19 12 12 19' />
             </svg>
           </a>
+          <a href='#contact' className='btn-outline'>
+            {t('hero.cta_contact')}
+          </a>
+          <a href='/api/cv' download className='btn-outline' aria-label={t('hero.cta_cv')}>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='16'
+              height='16'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              strokeWidth='2.5'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              aria-hidden='true'
+            >
+              <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
+              <polyline points='7 10 12 15 17 10' />
+              <line x1='12' y1='15' x2='12' y2='3' />
+            </svg>
+            {t('hero.cta_cv')}
+          </a>
+        </div>
+      </div>
+
+      <div
+        className='hero-item absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0'
+        aria-hidden='true'
+      >
+        <span className='text-xs font-medium tracking-widest uppercase' style={{ color: 'var(--text-muted)' }}>
+          {t('hero.scroll')}
+        </span>
+        <div
+          className='w-5 h-8 rounded-full border-2 flex items-start justify-center pt-1.5'
+          style={{ borderColor: 'var(--border-accent)' }}
+        >
+          <div className='w-1 h-2 rounded-full animate-bounce' style={{ background: 'var(--primary)' }} />
         </div>
       </div>
     </section>

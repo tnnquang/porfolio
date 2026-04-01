@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import { ThemeProvider } from '@/contexts/ThemeContext'
+import { I18nProvider } from '@/contexts/I18nProvider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -15,35 +17,38 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Quang Tran — Frontend Developer',
+  title: 'Quang Trần — Frontend Developer',
   description:
-    'Frontend Developer with 5+ years of React.js and 4+ years of Next.js experience. Specialized in performance optimization, complex interactive UI, and React concurrent patterns.',
+    'Frontend Developer 5+ năm kinh nghiệm với React.js và Next.js. Chuyên sâu tối ưu hiệu suất, UI tương tác phức tạp và React concurrent patterns.',
   openGraph: {
-    title: 'Quang Tran — Frontend Developer',
+    title: 'Quang Trần — Frontend Developer',
     description:
-      'Frontend Developer with 5+ years of React.js and 4+ years of Next.js experience, delivering production applications across fintech and e-commerce domains.',
+      'Frontend Developer 5+ năm kinh nghiệm với React.js và Next.js, xây dựng ứng dụng production trong fintech và thương mại điện tử.',
     type: 'website',
-    locale: 'en_US'
+    locale: 'vi_VN'
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Quang Tran — Frontend Developer',
-    description: 'Frontend Developer with 5+ years of React.js and 4+ years of Next.js experience.'
+    title: 'Quang Trần — Frontend Developer',
+    description: 'Frontend Developer 5+ năm kinh nghiệm với React.js và Next.js.'
   },
-  robots: {
-    index: true,
-    follow: true
-  }
+  robots: { index: true, follow: true }
 }
 
-export default function RootLayout({
-  children
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+/* Anti-FOUC: apply saved theme before first paint */
+const themeScript = `(function(){var t=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',t||'light');})()`
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang='en' className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <body className='min-h-dvh flex flex-col'>{children}</body>
+    <html lang='vi' className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className='min-h-dvh flex flex-col antialiased'>
+        <ThemeProvider>
+          <I18nProvider>{children}</I18nProvider>
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

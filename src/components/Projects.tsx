@@ -1,114 +1,107 @@
-import { sideProjects } from '@/data/portfolio'
+'use client'
 
-const techColor = (index: number) => {
-  const colors = [
-    'bg-[rgba(0,212,255,0.06)] text-[var(--neon-cyan)] border border-[rgba(0,212,255,0.2)]',
-    'bg-[rgba(168,85,247,0.06)] text-[var(--neon-purple)] border border-[rgba(168,85,247,0.2)]',
-    'bg-[rgba(16,185,129,0.06)] text-[var(--neon-green)] border border-[rgba(16,185,129,0.2)]',
-    'bg-[rgba(244,114,182,0.06)] text-[var(--neon-pink)] border border-[rgba(244,114,182,0.2)]'
-  ]
-  return colors[index % colors.length]
-}
+import { useTranslation } from 'react-i18next'
+import { sideProjects } from '@/data/portfolio'
+import { useStaggerReveal } from '@/hooks/useStaggerReveal'
+
+const colorAccents = [
+  'var(--primary)',
+  'var(--secondary)',
+  'var(--accent)',
+  'var(--primary)',
+  'var(--secondary)',
+  'var(--accent)'
+]
 
 export default function Projects() {
-  return (
-    <section id='projects' aria-labelledby='projects-heading' className='relative py-24 sm:py-32 px-4 sm:px-6'>
-      <div
-        aria-hidden='true'
-        className='orb orb-purple absolute w-112.5 h-112.5 top-16 right-0 opacity-25 pointer-events-none'
-      />
+  const { t } = useTranslation()
+  const ref = useStaggerReveal<HTMLDivElement>()
 
-      <div className='relative z-10 max-w-6xl mx-auto'>
-        {/* Section label */}
-        <div className='flex items-center gap-3 mb-4'>
-          <span className='text-neon-green font-mono text-sm tracking-widest uppercase'>04</span>
-          <div className='h-px flex-1 max-w-15 bg-neon-green opacity-40' aria-hidden='true' />
+  return (
+    <section
+      id='projects'
+      aria-labelledby='projects-title'
+      className='py-24 sm:py-32 px-4 sm:px-6'
+      style={{ background: 'var(--bg)' }}
+    >
+      <div className='max-w-6xl mx-auto'>
+        <div className='relative mb-6'>
+          <span className='section-num' aria-hidden='true'>
+            {t('projects.section_num')}
+          </span>
+          <p className='text-sm font-semibold uppercase tracking-widest mb-2' style={{ color: 'var(--primary)' }}>
+            {t('projects.section_num')} /
+          </p>
+          <h2
+            id='projects-title'
+            className='text-3xl sm:text-4xl lg:text-5xl font-black mb-4'
+            style={{ color: 'var(--text)' }}
+          >
+            {t('projects.title')}
+          </h2>
+          <p className='max-w-xl text-base' style={{ color: 'var(--text-2)' }}>
+            {t('projects.desc')}
+          </p>
         </div>
 
-        <h2
-          id='projects-heading'
-          className='text-3xl sm:text-4xl font-bold mb-4'
-          style={{
-            background: 'linear-gradient(135deg, var(--neon-green) 0%, var(--neon-cyan) 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text'
-          }}
-        >
-          Side Projects
-        </h2>
-        <p className='text-(--text-secondary) mb-12 max-w-xl'>
-          Personal fullstack projects built from scratch — exploring new architectures, stacks, and ideas.
+        <p className='mb-8 text-xs font-semibold uppercase tracking-wider' style={{ color: 'var(--text-muted)' }}>
+          {t('projects.note')}
         </p>
 
-        <div className='grid sm:grid-cols-2 lg:grid-cols-3 gap-5'>
-          {sideProjects.map((project, idx) => (
-            <article key={project.name} className='glass-card rounded-2xl p-6 flex flex-col gap-4 group'>
-              {/* Header */}
-              <div className='flex items-start justify-between gap-3'>
-                <div
-                  className='w-10 h-10 rounded-xl shrink-0 flex items-center justify-center'
-                  style={{
-                    background: `linear-gradient(135deg, rgba(0,212,255,0.15) ${idx * 15}%, rgba(168,85,247,0.15) 100%)`,
-                    border: '1px solid rgba(255,255,255,0.08)'
-                  }}
-                  aria-hidden='true'
-                >
-                  <svg
-                    width='18'
-                    height='18'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='2'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='text-neon-cyan'
-                  >
-                    <polyline points='16 18 22 12 16 6' />
-                    <polyline points='8 6 2 12 8 18' />
-                  </svg>
+        <div ref={ref} className='grid sm:grid-cols-2 lg:grid-cols-3 gap-5'>
+          {sideProjects.map((project, i) => {
+            const color = colorAccents[i % colorAccents.length]
+            return (
+              <article
+                key={project.name}
+                className='reveal-item glass rounded-2xl p-6 flex flex-col transition-all duration-300 hover:shadow-lg group'
+                style={{ borderTop: `3px solid ${color}` }}
+                aria-label={project.name}
+              >
+                <div className='flex items-start justify-between gap-3 mb-3'>
+                  <h3 className='text-base font-bold leading-snug' style={{ color: 'var(--text)' }}>
+                    {project.name}
+                  </h3>
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      aria-label={`${t('projects.view_source')}: ${project.name}`}
+                      className='shrink-0 p-2 rounded-lg transition-colors duration-200 min-w-11 min-h-11 flex items-center justify-center'
+                      style={{ color: 'var(--text-muted)' }}
+                      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = color)}
+                      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--text-muted)')}
+                    >
+                      <svg
+                        xmlns='http://www.w3.org/2000/svg'
+                        width='18'
+                        height='18'
+                        viewBox='0 0 24 24'
+                        fill='currentColor'
+                        aria-hidden='true'
+                      >
+                        <path d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z' />
+                      </svg>
+                    </a>
+                  )}
                 </div>
 
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    aria-label={`View ${project.name} on GitHub`}
-                    className='opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-(--text-muted) hover:text-neon-cyan focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan rounded p-1'
-                  >
-                    <svg width='18' height='18' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
-                      <path d='M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z' />
-                    </svg>
-                  </a>
-                )}
-              </div>
+                <p className='text-sm leading-relaxed flex-1 mb-4' style={{ color: 'var(--text-2)' }}>
+                  {project.description}
+                </p>
 
-              {/* Content */}
-              <div className='flex-1'>
-                <h3 className='text-base font-semibold text-foreground mb-2 group-hover:text-neon-cyan transition-colors duration-200'>
-                  {project.name}
-                </h3>
-                <p className='text-sm text-(--text-secondary) leading-relaxed'>{project.description}</p>
-              </div>
-
-              {/* Tech */}
-              <ul className='flex flex-wrap gap-1.5' role='list' aria-label={`${project.name} technologies`}>
-                {project.tech.map((t, ti) => (
-                  <li key={t}>
-                    <span className={`neon-badge text-[0.7rem] ${techColor(ti)}`}>{t}</span>
-                  </li>
-                ))}
-              </ul>
-            </article>
-          ))}
+                <div className='flex flex-wrap gap-1.5 mt-auto' aria-label='Technologies'>
+                  {project.tech.map((tech) => (
+                    <span key={tech} className='px-2.5 py-1 rounded-full text-xs font-semibold badge-neutral'>
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            )
+          })}
         </div>
-
-        {/* Timeline note */}
-        <p className='mt-8 text-center text-(--text-muted) text-sm font-mono'>
-          All projects built 2021 – Present as fullstack developer
-        </p>
       </div>
     </section>
   )

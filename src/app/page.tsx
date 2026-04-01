@@ -6,6 +6,7 @@ import Experience from '@/components/Experience'
 import Projects from '@/components/Projects'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
+import BackToTop from '@/components/BackToTop'
 
 export default function Home() {
   return (
@@ -21,25 +22,15 @@ export default function Home() {
 
       <main id='main-content' className='flex-1'>
         <Hero />
-
-        {/* Dividers between sections */}
-        <div className='section-divider' aria-hidden='true' />
         <About />
-
-        <div className='section-divider' aria-hidden='true' />
         <TechStack />
-
-        <div className='section-divider' aria-hidden='true' />
         <Experience />
-
-        <div className='section-divider' aria-hidden='true' />
         <Projects />
-
-        <div className='section-divider' aria-hidden='true' />
         <Contact />
       </main>
 
       <Footer />
+      <BackToTop />
     </>
   )
 }

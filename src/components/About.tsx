@@ -1,149 +1,105 @@
-import { personalInfo, education, coreCompetencies } from '@/data/portfolio'
+'use client'
+
+import { useTranslation } from 'react-i18next'
+import { personalInfo, education } from '@/data/portfolio'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+
+const stats = [
+  { key: 'stats_yoe', value: '5+' },
+  { key: 'stats_nextjs', value: '4+' },
+  { key: 'stats_projects', value: '15+' },
+  { key: 'stats_domains', value: '3' },
+]
+
+const coreCompetencies = [
+  'React Performance', 'Next.js App Router', 'TypeScript', 'Design Systems',
+  'Team Leadership', 'Code Review', 'CI/CD', 'Web3', 'Fintech', 'E-Commerce',
+]
 
 export default function About() {
+  const { t } = useTranslation()
+  const leftRef = useScrollReveal<HTMLDivElement>({ translateX: -32 })
+  const rightRef = useScrollReveal<HTMLDivElement>({ translateX: 32, delay: 120 })
+
   return (
-    <section id='about' aria-labelledby='about-heading' className='relative py-24 sm:py-32 px-4 sm:px-6'>
-      <div className='max-w-6xl mx-auto'>
-        {/* Section label */}
-        <div className='flex items-center gap-3 mb-4'>
-          <span className='text-neon-cyan font-mono text-sm tracking-widest uppercase'>01</span>
-          <div className='h-px flex-1 max-w-15 bg-neon-cyan opacity-40' aria-hidden='true' />
+    <section id="about" aria-labelledby="about-title" className="py-24 sm:py-32 px-4 sm:px-6" style={{ background: 'var(--bg-alt)' }}>
+      <div className="max-w-6xl mx-auto">
+        {/* Section header */}
+        <div className="relative mb-16">
+          <span className="section-num" aria-hidden="true">{t('about.section_num')}</span>
+          <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--primary)' }}>
+            {t('about.section_num')} /
+          </p>
+          <h2 id="about-title" className="text-3xl sm:text-4xl lg:text-5xl font-black" style={{ color: 'var(--text)' }}>
+            {t('about.title')}
+          </h2>
         </div>
 
-        <h2 id='about-heading' className='text-3xl sm:text-4xl font-bold mb-12 gradient-text-cyan-purple'>
-          About Me
-        </h2>
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-16 items-start">
+          {/* Left: Bio + Education */}
+          <div ref={leftRef} className="space-y-6" style={{ opacity: 0 }}>
+            <div className="glass-amber rounded-2xl p-6">
+              <p className="text-base leading-relaxed" style={{ color: 'var(--text-2)' }}>
+                {personalInfo.summary}
+              </p>
+            </div>
 
-        <div className='grid lg:grid-cols-2 gap-10 lg:gap-16'>
-          {/* Left: bio */}
-          <div className='space-y-6'>
-            <div className='glass-card rounded-2xl p-6 sm:p-8 space-y-5'>
-              <p className='text-(--text-secondary) leading-relaxed text-base sm:text-lg'>{personalInfo.summary}</p>
-              <div className='section-divider' aria-hidden='true' />
-              <div>
-                <p className='text-xs font-mono uppercase tracking-widest text-(--text-muted) mb-2'>
-                  Short-term goal · 2 years
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="glass rounded-xl p-5">
+                <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--primary)' }}>
+                  {t('about.education_label')}
                 </p>
-                <p className='text-(--text-secondary) text-sm leading-relaxed'>{personalInfo.shortTermGoal}</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{education.school}</p>
+                <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{education.degree}</p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{education.period}</p>
               </div>
-              <div>
-                <p className='text-xs font-mono uppercase tracking-widest text-(--text-muted) mb-2'>
-                  Long-term goal · 3–5 years
+              <div className="glass rounded-xl p-5">
+                <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--primary)' }}>
+                  {t('about.location_label')}
                 </p>
-                <p className='text-(--text-secondary) text-sm leading-relaxed'>{personalInfo.longTermGoal}</p>
+                <p className="text-sm font-semibold" style={{ color: 'var(--text)' }}>{personalInfo.location}</p>
               </div>
             </div>
 
-            {/* Education */}
-            <div className='glass-card rounded-2xl p-6 sm:p-8'>
-              <div className='flex items-start gap-4'>
-                <div
-                  className='mt-1 shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-linear-to-br from-[rgba(0,212,255,0.15)] to-[rgba(168,85,247,0.15)] neon-border-cyan'
-                  aria-hidden='true'
-                >
-                  <svg
-                    width='18'
-                    height='18'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='2'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='text-neon-cyan'
-                  >
-                    <path d='M22 10v6M2 10l10-5 10 5-10 5z' />
-                    <path d='M6 12v5c3 3 9 3 12 0v-5' />
-                  </svg>
-                </div>
-                <div>
-                  <p className='text-xs font-mono uppercase tracking-widest text-(--text-muted) mb-1'>Education</p>
-                  <p className='text-foreground font-medium leading-snug mb-1'>{education.school}</p>
-                  <p className='text-(--text-secondary) text-sm mb-1'>{education.degree}</p>
-                  <p className='text-(--text-muted) text-xs font-mono'>{education.period}</p>
-                </div>
+            {/* Goals */}
+            <div className="glass rounded-xl p-5 space-y-4">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--secondary)' }}>
+                  {t('about.short_goal_label')}
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>{personalInfo.shortTermGoal}</p>
+              </div>
+              <div className="h-px" style={{ background: 'var(--border)' }} />
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--accent)' }}>
+                  {t('about.long_goal_label')}
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>{personalInfo.longTermGoal}</p>
               </div>
             </div>
           </div>
 
-          {/* Right: stats + competencies */}
-          <div className='space-y-6'>
-            {/* Stats */}
-            <div className='grid grid-cols-2 gap-4'>
-              {[
-                { value: '5+', label: 'Years Experience', color: 'cyan' },
-                { value: '4+', label: 'Years Next.js', color: 'purple' },
-                { value: '15+', label: 'Projects Shipped', color: 'green' },
-                { value: '2', label: 'Domains (Fintech / Web3)', color: 'pink' }
-              ].map(({ value, label, color }) => (
-                <div
-                  key={label}
-                  className={`glass-card rounded-2xl p-5 text-center ${
-                    color === 'cyan'
-                      ? 'neon-border-cyan'
-                      : color === 'purple'
-                        ? 'neon-border-purple'
-                        : 'border border-[rgba(255,255,255,0.08)]'
-                  }`}
-                >
-                  <p
-                    className={`text-3xl font-bold font-mono mb-1 ${
-                      color === 'cyan'
-                        ? 'text-neon-cyan'
-                        : color === 'purple'
-                          ? 'text-neon-purple'
-                          : color === 'green'
-                            ? 'text-neon-green'
-                            : 'text-neon-pink'
-                    }`}
-                  >
-                    {value}
-                  </p>
-                  <p className='text-(--text-muted) text-xs leading-tight'>{label}</p>
+          {/* Right: Stats + Competencies */}
+          <div ref={rightRef} className="space-y-6" style={{ opacity: 0 }}>
+            <div className="grid grid-cols-2 gap-4">
+              {stats.map(({ key, value }) => (
+                <div key={key} className="glass-amber rounded-xl p-5 text-center">
+                  <p className="text-3xl sm:text-4xl font-black gradient-text leading-none mb-1">{value}</p>
+                  <p className="text-xs font-medium" style={{ color: 'var(--text-2)' }}>{t(`about.${key}`)}</p>
                 </div>
               ))}
             </div>
 
-            {/* Core competencies */}
-            <div className='glass-card rounded-2xl p-6 sm:p-8'>
-              <h3 className='text-xs font-mono uppercase tracking-widest text-(--text-muted) mb-4'>
-                Core Competencies
-              </h3>
-              <ul className='flex flex-wrap gap-2' role='list' aria-label='Core competencies'>
-                {coreCompetencies.map((item) => (
-                  <li key={item}>
-                    <span className='neon-badge bg-[rgba(168,85,247,0.08)] text-neon-purple border border-[rgba(168,85,247,0.25)]'>
-                      {item}
-                    </span>
-                  </li>
+            <div className="glass rounded-xl p-6">
+              <p className="text-sm font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--primary)' }}>
+                {t('about.competencies_title')}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {coreCompetencies.map((c) => (
+                  <span key={c} className="px-3 py-1.5 rounded-full text-xs font-semibold badge-neutral">
+                    {c}
+                  </span>
                 ))}
-              </ul>
-            </div>
-
-            {/* Location */}
-            <div className='glass-card rounded-2xl p-5 flex items-center gap-4'>
-              <div
-                className='shrink-0 w-9 h-9 rounded-lg flex items-center justify-center bg-[rgba(16,185,129,0.1)]'
-                aria-hidden='true'
-              >
-                <svg
-                  width='16'
-                  height='16'
-                  viewBox='0 0 24 24'
-                  fill='none'
-                  stroke='currentColor'
-                  strokeWidth='2'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  className='text-neon-green'
-                >
-                  <path d='M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z' />
-                  <circle cx='12' cy='10' r='3' />
-                </svg>
-              </div>
-              <div>
-                <p className='text-xs font-mono uppercase tracking-widest text-(--text-muted)'>Location</p>
-                <p className='text-(--text-secondary) text-sm'>{personalInfo.location}</p>
               </div>
             </div>
           </div>

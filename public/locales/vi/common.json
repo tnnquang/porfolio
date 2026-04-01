@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "about": "Về tôi",
+    "skills": "Kỹ năng",
+    "experience": "Kinh nghiệm",
+    "projects": "Dự án",
+    "contact": "Liên hệ",
+    "hire": "Hợp tác"
+  },
+  "hero": {
+    "greeting": "Xin chào, tôi là",
+    "available": "Đang tìm kiếm cơ hội mới",
+    "yoe": "năm kinh nghiệm",
+    "roles": ["Frontend Developer", "React Specialist", "Next.js Expert", "UI Engineer"],
+    "cta_work": "Xem kinh nghiệm",
+    "cta_contact": "Liên hệ ngay",
+    "cta_cv": "Tải CV",
+    "scroll": "Cuộn xuống"
+  },
+  "about": {
+    "section_num": "01",
+    "title": "Về tôi",
+    "short_goal_label": "Mục tiêu ngắn hạn · 2 năm",
+    "long_goal_label": "Mục tiêu dài hạn · 3–5 năm",
+    "education_label": "Học vấn",
+    "location_label": "Vị trí",
+    "stats_yoe": "Năm kinh nghiệm",
+    "stats_nextjs": "Năm Next.js",
+    "stats_projects": "Dự án đã ship",
+    "stats_domains": "Lĩnh vực",
+    "competencies_title": "Kỹ năng cốt lõi"
+  },
+  "skills": {
+    "section_num": "02",
+    "title": "Kỹ năng",
+    "desc": "Công nghệ đã sử dụng trong các ứng dụng thực tế từ fintech đến Web3 và thương mại điện tử."
+  },
+  "experience": {
+    "section_num": "03",
+    "title": "Kinh nghiệm",
+    "desc": "5+ năm xây dựng ứng dụng production trong lĩnh vực fintech, Web3 và thương mại điện tử.",
+    "team_label": "Nhóm",
+    "type_fulltime": "Toàn thời gian",
+    "type_freelance": "Freelance"
+  },
+  "projects": {
+    "section_num": "04",
+    "title": "Dự án cá nhân",
+    "desc": "Các dự án fullstack xây dựng từ đầu — khám phá kiến trúc mới, công nghệ và ý tưởng sáng tạo.",
+    "note": "Tất cả dự án được xây dựng giai đoạn 2021 – Hiện tại",
+    "view_source": "Xem mã nguồn"
+  },
+  "contact": {
+    "section_num": "05",
+    "title": "Hãy xây dựng cùng nhau",
+    "desc": "Tôi luôn sẵn sàng cho cơ hội mới, dự án freelance và hợp tác thú vị. Hộp thư của tôi luôn rộng mở.",
+    "cta": "Gửi lời chào",
+    "or": "hoặc kết nối qua",
+    "label_email": "Email",
+    "label_phone": "Điện thoại",
+    "label_github": "GitHub",
+    "label_linkedin": "LinkedIn"
+  },
+  "footer": {
+    "built_with": "Xây dựng với",
+    "rights": "Bảo lưu mọi quyền",
+    "back_top": "Lên đầu trang"
+  },
+  "theme": {
+    "toggle_dark": "Chuyển sang chế độ tối",
+    "toggle_light": "Chuyển sang chế độ sáng"
+  },
+  "lang": {
+    "switch_to_en": "Switch to English",
+    "switch_to_vi": "Chuyển sang Tiếng Việt"
+  }
+}

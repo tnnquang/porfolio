@@ -1,18 +1,22 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-
-const navLinks = [
-  { href: '#about', label: 'About' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#contact', label: 'Contact' }
-]
+import { useTranslation } from 'react-i18next'
+import ThemeToggle from './ThemeToggle'
+import LanguageSwitcher from './LanguageSwitcher'
 
 export default function Navbar() {
+  const { t } = useTranslation()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+
+  const navLinks = [
+    { href: '#about', label: t('nav.about') },
+    { href: '#skills', label: t('nav.skills') },
+    { href: '#experience', label: t('nav.experience') },
+    { href: '#projects', label: t('nav.projects') },
+    { href: '#contact', label: t('nav.contact') }
+  ]
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 24)
@@ -26,28 +30,30 @@ export default function Navbar() {
     <header
       role='banner'
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'py-3 backdrop-blur-xl bg-[rgba(5,5,15,0.85)] border-b border-[rgba(0,212,255,0.1)]'
-          : 'py-5 bg-transparent'
+        scrolled ? 'py-2 glass border-b' : 'py-4 bg-transparent'
       }`}
+      style={scrolled ? { borderColor: 'var(--border)' } : {}}
     >
       <nav aria-label='Main navigation' className='max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between'>
         {/* Logo */}
         <a
           href='#hero'
-          className='font-mono text-lg font-bold gradient-text-cyan-purple tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan rounded'
-          aria-label='Back to top'
+          className='font-mono text-xl font-black gradient-text tracking-tight rounded-sm'
+          aria-label='Quang Trần — back to top'
         >
           QT.dev
         </a>
 
         {/* Desktop links */}
-        <ul className='hidden md:flex items-center gap-8' role='list'>
+        <ul className='hidden md:flex items-center gap-7' role='list'>
           {navLinks.map(({ href, label }) => (
             <li key={href}>
               <a
                 href={href}
-                className='text-sm text-(--text-secondary) hover:text-neon-cyan transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan rounded px-1'
+                className='text-sm font-medium transition-colors duration-200 rounded px-1 py-0.5'
+                style={{ color: 'var(--text-2)' }}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--primary)')}
+                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--text-2)')}
               >
                 {label}
               </a>
@@ -55,66 +61,79 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* CTA */}
-        <div className='hidden md:flex items-center gap-3'>
+        {/* Controls */}
+        <div className='hidden md:flex items-center gap-1'>
+          <LanguageSwitcher />
+          <ThemeToggle />
           <a
             href='#contact'
-            className='text-sm px-4 py-1.5 rounded-full neon-border-cyan text-neon-cyan hover:bg-[rgba(0,212,255,0.08)] transition-all duration-200'
+            className='btn-primary ml-2 text-sm py-2 px-4'
+            style={{ minHeight: '36px', padding: '0.45rem 1rem' }}
           >
-            Hire me
+            {t('nav.hire')}
           </a>
         </div>
 
         {/* Mobile hamburger */}
-        <button
-          type='button'
-          aria-expanded={menuOpen}
-          aria-controls='mobile-menu'
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-          onClick={() => setMenuOpen((o) => !o)}
-          className='md:hidden flex flex-col gap-1.5 p-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan'
-        >
-          <span
-            className={`block h-0.5 w-5 bg-foreground transition-transform duration-200 ${
-              menuOpen ? 'rotate-45 translate-y-2' : ''
-            }`}
-          />
-          <span
-            className={`block h-0.5 w-5 bg-foreground transition-opacity duration-200 ${menuOpen ? 'opacity-0' : ''}`}
-          />
-          <span
-            className={`block h-0.5 w-5 bg-foreground transition-transform duration-200 ${
-              menuOpen ? '-rotate-45 -translate-y-2' : ''
-            }`}
-          />
-        </button>
+        <div className='md:hidden flex items-center gap-1'>
+          <LanguageSwitcher />
+          <ThemeToggle />
+          <button
+            type='button'
+            aria-expanded={menuOpen}
+            aria-controls='mobile-menu'
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMenuOpen((o) => !o)}
+            className='flex flex-col gap-1.5 p-2 ml-1 rounded-lg'
+            style={{ color: 'var(--text)' }}
+          >
+            <span
+              className={`block h-0.5 w-5 transition-transform duration-200 origin-center`}
+              style={{
+                background: 'var(--text)',
+                transform: menuOpen ? 'rotate(45deg) translate(3px, 6px)' : ''
+              }}
+            />
+            <span
+              className='block h-0.5 w-5 transition-opacity duration-200'
+              style={{ background: 'var(--text)', opacity: menuOpen ? 0 : 1 }}
+            />
+            <span
+              className='block h-0.5 w-5 transition-transform duration-200 origin-center'
+              style={{
+                background: 'var(--text)',
+                transform: menuOpen ? 'rotate(-45deg) translate(3px, -6px)' : ''
+              }}
+            />
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
       {menuOpen && (
         <div
           id='mobile-menu'
-          className='md:hidden backdrop-blur-xl bg-[rgba(5,5,15,0.95)] border-t border-[rgba(0,212,255,0.1)] px-6 pb-6 pt-4'
+          role='dialog'
+          aria-label='Navigation menu'
+          className='md:hidden glass border-t px-6 pb-6 pt-4'
+          style={{ borderColor: 'var(--border)' }}
         >
-          <ul className='flex flex-col gap-4' role='list'>
+          <ul className='flex flex-col gap-2' role='list'>
             {navLinks.map(({ href, label }) => (
               <li key={href}>
                 <a
                   href={href}
                   onClick={handleNavClick}
-                  className='text-base text-(--text-secondary) hover:text-neon-cyan transition-colors duration-200 block py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan rounded'
+                  className='text-base font-medium block py-3 px-2 rounded-lg transition-colors duration-200'
+                  style={{ color: 'var(--text-2)' }}
                 >
                   {label}
                 </a>
               </li>
             ))}
           </ul>
-          <a
-            href='#contact'
-            onClick={handleNavClick}
-            className='mt-4 block text-center text-sm px-4 py-2 rounded-full neon-border-cyan text-neon-cyan hover:bg-[rgba(0,212,255,0.08)] transition-all duration-200'
-          >
-            Hire me
+          <a href='#contact' onClick={handleNavClick} className='btn-primary mt-4 w-full justify-center'>
+            {t('nav.hire')}
           </a>
         </div>
       )}

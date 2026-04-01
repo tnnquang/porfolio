@@ -1,46 +1,43 @@
+'use client'
+
+import { useTranslation } from 'react-i18next'
 import { personalInfo } from '@/data/portfolio'
 
 export default function Footer() {
+  const { t } = useTranslation()
   const year = new Date().getFullYear()
 
   return (
-    <footer role='contentinfo' className='relative border-t border-[rgba(255,255,255,0.06)] py-10 px-4 sm:px-6'>
-      <div className='max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4'>
-        {/* Brand */}
-        <a
-          href='#hero'
-          className='font-mono text-base font-bold gradient-text-cyan-purple focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neon-cyan)] rounded'
-          aria-label='Back to top'
-        >
-          QT.dev
-        </a>
+    <footer
+      role="contentinfo"
+      className="py-10 px-4 sm:px-6"
+      style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)' }}
+    >
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="text-center sm:text-left">
+          <p className="font-mono font-black text-lg gradient-text">{personalInfo.name.split(' ').pop()}.dev</p>
+          <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+            © {year} {personalInfo.name} · {t('footer.rights')}
+          </p>
+        </div>
 
-        {/* Copy */}
-        <p className='text-[var(--text-muted)] text-sm text-center'>
-          &copy; {year} {personalInfo.name}. Built with <span className='text-[var(--neon-cyan)]'>Next.js 16</span>{' '}
-          &amp; <span className='text-[var(--neon-purple)]'>Tailwind CSS v4</span>.
+        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          {t('footer.built_with')}{' '}
+          <span style={{ color: 'var(--primary)' }}>Next.js</span>,{' '}
+          <span style={{ color: 'var(--secondary)' }}>Tailwind</span> &{' '}
+          <span style={{ color: 'var(--accent)' }}>anime.js</span>
         </p>
 
-        {/* Scroll to top */}
-        <a
-          href='#hero'
-          aria-label='Scroll to top'
-          className='w-9 h-9 rounded-full glass-card neon-border-cyan flex items-center justify-center text-[var(--neon-cyan)] hover:bg-[rgba(0,212,255,0.1)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neon-cyan)]'
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label={t('footer.back_top')}
+          className="btn-outline text-sm py-2 px-4 min-h-11"
         >
-          <svg
-            width='16'
-            height='16'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            strokeWidth='2'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            aria-hidden='true'
-          >
-            <path d='m18 15-6-6-6 6' />
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polyline points="18 15 12 9 6 15" />
           </svg>
-        </a>
+          {t('footer.back_top')}
+        </button>
       </div>
     </footer>
   )

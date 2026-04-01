@@ -1,148 +1,122 @@
+'use client'
+
+import { useTranslation } from 'react-i18next'
 import { personalInfo } from '@/data/portfolio'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
 
 const contactLinks = [
   {
-    label: 'Email',
-    value: personalInfo.email,
-    href: `mailto:${personalInfo.email}`,
+    key: 'email',
+    href: (info: typeof personalInfo) => `mailto:${info.email}`,
+    value: (info: typeof personalInfo) => info.email,
+    color: 'var(--primary)',
     icon: (
-      <svg
-        width='20'
-        height='20'
-        viewBox='0 0 24 24'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth='2'
-        strokeLinecap='round'
-        strokeLinejoin='round'
-        aria-hidden='true'
-      >
-        <rect width='20' height='16' x='2' y='4' rx='2' />
-        <path d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' />
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+        <polyline points="22,6 12,13 2,6" />
       </svg>
     ),
-    color: 'cyan'
   },
   {
-    label: 'GitHub',
-    value: personalInfo.github.replace(/^https?:\/\//, ''),
-    href: personalInfo.github,
+    key: 'phone',
+    href: (info: typeof personalInfo) => `tel:${info.phone.replace(/[^+0-9]/g, '')}`,
+    value: (info: typeof personalInfo) => info.phone,
+    color: 'var(--secondary)',
     icon: (
-      <svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
-        <path d='M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z' />
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z" />
       </svg>
     ),
-    color: 'purple'
   },
   {
-    label: 'LinkedIn',
-    value: personalInfo.linkedin.replace(/^https?:\/\//, ''),
-    href: personalInfo.linkedin,
+    key: 'github',
+    href: (info: typeof personalInfo) => info.github,
+    value: (info: typeof personalInfo) => info.github.replace('https://', ''),
+    color: 'var(--text-2)',
     icon: (
-      <svg width='20' height='20' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>
-        <path d='M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' />
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
       </svg>
     ),
-    color: 'green'
-  }
+  },
+  {
+    key: 'linkedin',
+    href: (info: typeof personalInfo) => info.linkedin,
+    value: (info: typeof personalInfo) => info.linkedin.replace('https://', ''),
+    color: '#0077b5',
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    ),
+  },
 ]
 
-const colorMap: Record<string, { icon: string; badge: string }> = {
-  cyan: {
-    icon: 'text-[var(--neon-cyan)] bg-[rgba(0,212,255,0.1)]',
-    badge: 'neon-border-cyan hover:bg-[rgba(0,212,255,0.08)]'
-  },
-  purple: {
-    icon: 'text-[var(--neon-purple)] bg-[rgba(168,85,247,0.1)]',
-    badge: 'neon-border-purple hover:bg-[rgba(168,85,247,0.08)]'
-  },
-  green: {
-    icon: 'text-[var(--neon-green)] bg-[rgba(16,185,129,0.1)]',
-    badge: 'border border-[rgba(16,185,129,0.4)] hover:bg-[rgba(16,185,129,0.08)]'
-  }
-}
-
 export default function Contact() {
-  return (
-    <section id='contact' aria-labelledby='contact-heading' className='relative py-24 sm:py-32 px-4 sm:px-6'>
-      {/* Decorative orbs */}
-      <div
-        aria-hidden='true'
-        className='orb orb-cyan absolute w-100 h-100 top-0 left-1/2 -translate-x-1/2 opacity-20 pointer-events-none'
-      />
-      <div
-        aria-hidden='true'
-        className='orb orb-purple absolute w-87.5 h-87.5 bottom-0 left-0 opacity-20 pointer-events-none'
-      />
+  const { t } = useTranslation()
+  const leftRef = useScrollReveal<HTMLDivElement>({ translateX: -28 })
+  const rightRef = useScrollReveal<HTMLDivElement>({ translateX: 28, delay: 120 })
 
-      <div className='relative z-10 max-w-4xl mx-auto text-center'>
-        {/* Section label */}
-        <div className='flex items-center justify-center gap-3 mb-4'>
-          <div className='h-px w-12 bg-neon-pink opacity-40' aria-hidden='true' />
-          <span className='text-neon-pink font-mono text-sm tracking-widest uppercase'>05</span>
-          <div className='h-px w-12 bg-neon-pink opacity-40' aria-hidden='true' />
+  return (
+    <section id="contact" aria-labelledby="contact-title" className="py-24 sm:py-32 px-4 sm:px-6" style={{ background: 'var(--bg-alt)' }}>
+      <div className="max-w-6xl mx-auto">
+        <div className="relative mb-16">
+          <span className="section-num" aria-hidden="true">{t('contact.section_num')}</span>
+          <p className="text-sm font-semibold uppercase tracking-widest mb-2" style={{ color: 'var(--primary)' }}>
+            {t('contact.section_num')} /
+          </p>
         </div>
 
-        <h2 id='contact-heading' className='text-3xl sm:text-5xl font-bold mb-6 gradient-text-purple-pink'>
-          Let&apos;s Build Together
-        </h2>
-        <p className='text-(--text-secondary) text-base sm:text-lg leading-relaxed mb-12 max-w-xl mx-auto'>
-          I&apos;m open to new opportunities, freelance projects, and interesting collaborations. Whether you have a job
-          offer, a project idea, or just want to chat — my inbox is always open.
-        </p>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left: CTA text */}
+          <div ref={leftRef} style={{ opacity: 0 }}>
+            <h2 id="contact-title" className="text-3xl sm:text-4xl lg:text-5xl font-black mb-6 leading-tight" style={{ color: 'var(--text)' }}>
+              <span className="gradient-text">{t('contact.title')}</span>
+            </h2>
+            <p className="text-base sm:text-lg leading-relaxed mb-8" style={{ color: 'var(--text-2)' }}>
+              {t('contact.desc')}
+            </p>
+            <a
+              href={`mailto:${personalInfo.email}`}
+              className="btn-primary inline-flex"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+              {t('contact.cta')}
+            </a>
+          </div>
 
-        {/* Primary CTA */}
-        <a
-          href={`mailto:${personalInfo.email}`}
-          className='inline-flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-background bg-linear-to-r from-neon-cyan to-neon-purple hover:opacity-90 transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background mb-12'
-        >
-          <svg
-            width='18'
-            height='18'
-            viewBox='0 0 24 24'
-            fill='none'
-            stroke='currentColor'
-            strokeWidth='2'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            aria-hidden='true'
-          >
-            <rect width='20' height='16' x='2' y='4' rx='2' />
-            <path d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' />
-          </svg>
-          Say Hello
-        </a>
-
-        {/* Divider */}
-        <div className='section-divider mb-12' aria-hidden='true' />
-
-        {/* Contact links */}
-        <ul
-          className='flex flex-col sm:flex-row items-center justify-center gap-4'
-          role='list'
-          aria-label='Contact links'
-        >
-          {contactLinks.map(({ label, value, href, icon, color }) => {
-            const colors = colorMap[color]
-            const isExternal = !href.startsWith('mailto:')
-            return (
-              <li key={label}>
-                <a
-                  href={href}
-                  target={isExternal ? '_blank' : undefined}
-                  rel={isExternal ? 'noopener noreferrer' : undefined}
-                  className={`flex items-center gap-3 px-5 py-3 rounded-xl glass-card ${colors.badge} transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--neon-cyan)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--bg-primary)]`}
-                >
-                  <span className={`p-1.5 rounded-lg ${colors.icon}`}>{icon}</span>
-                  <span>
-                    <span className='block text-xs text-[var(--text-muted)] font-mono'>{label}</span>
-                    <span className='block text-sm text-[var(--text-secondary)]'>{value}</span>
+          {/* Right: Contact cards */}
+          <div ref={rightRef} className="grid sm:grid-cols-2 gap-4" style={{ opacity: 0 }}>
+            {contactLinks.map(({ key, href, value, color, icon }) => (
+              <a
+                key={key}
+                href={href(personalInfo)}
+                target={key === 'github' || key === 'linkedin' ? '_blank' : undefined}
+                rel={key === 'github' || key === 'linkedin' ? 'noopener noreferrer' : undefined}
+                className="glass-amber rounded-2xl p-5 flex flex-col gap-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg group"
+                aria-label={`${t(`contact.label_${key}`)}: ${value(personalInfo)}`}
+              >
+                <div className="flex items-center gap-3">
+                  <span
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ background: `color-mix(in srgb, ${color} 15%, transparent)`, color }}
+                  >
+                    {icon}
                   </span>
-                </a>
-              </li>
-            )
-          })}
-        </ul>
+                  <span className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                    {t(`contact.label_${key}`)}
+                  </span>
+                </div>
+                <p className="text-sm font-semibold break-all" style={{ color: 'var(--text)' }}>
+                  {value(personalInfo)}
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )

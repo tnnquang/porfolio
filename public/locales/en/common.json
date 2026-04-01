@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "about": "About",
+    "skills": "Skills",
+    "experience": "Experience",
+    "projects": "Projects",
+    "contact": "Contact",
+    "hire": "Hire Me"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "available": "Open to new opportunities",
+    "yoe": "years of experience",
+    "roles": ["Frontend Developer", "React Specialist", "Next.js Expert", "UI Engineer"],
+    "cta_work": "View Experience",
+    "cta_contact": "Get in Touch",
+    "cta_cv": "Download CV",
+    "scroll": "Scroll down"
+  },
+  "about": {
+    "section_num": "01",
+    "title": "About Me",
+    "short_goal_label": "Short-term Goal · 2 years",
+    "long_goal_label": "Long-term Goal · 3–5 years",
+    "education_label": "Education",
+    "location_label": "Location",
+    "stats_yoe": "Years Experience",
+    "stats_nextjs": "Years Next.js",
+    "stats_projects": "Projects Shipped",
+    "stats_domains": "Domains",
+    "competencies_title": "Core Competencies"
+  },
+  "skills": {
+    "section_num": "02",
+    "title": "Skills",
+    "desc": "Technologies used in real-world applications spanning fintech, Web3, and e-commerce."
+  },
+  "experience": {
+    "section_num": "03",
+    "title": "Experience",
+    "desc": "5+ years building production apps in fintech, Web3, and e-commerce.",
+    "team_label": "Team",
+    "type_fulltime": "Full-time",
+    "type_freelance": "Freelance"
+  },
+  "projects": {
+    "section_num": "04",
+    "title": "Side Projects",
+    "desc": "Full-stack projects built from scratch — exploring new architectures, tech, and creative ideas.",
+    "note": "All projects built 2021 – Present",
+    "view_source": "View Source"
+  },
+  "contact": {
+    "section_num": "05",
+    "title": "Let's Build Together",
+    "desc": "I'm always open to new opportunities, freelance projects, and exciting collaborations. My inbox is always open.",
+    "cta": "Say Hello",
+    "or": "or connect via",
+    "label_email": "Email",
+    "label_phone": "Phone",
+    "label_github": "GitHub",
+    "label_linkedin": "LinkedIn"
+  },
+  "footer": {
+    "built_with": "Built with",
+    "rights": "All rights reserved",
+    "back_top": "Back to top"
+  },
+  "theme": {
+    "toggle_dark": "Switch to dark mode",
+    "toggle_light": "Switch to light mode"
+  },
+  "lang": {
+    "switch_to_en": "Switch to English",
+    "switch_to_vi": "Chuyển sang Tiếng Việt"
+  }
+}
